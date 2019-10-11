@@ -46,7 +46,7 @@ exports.handler = (event, context, callback) => {
             });
             callback(null, response);
             return;
-        } 
+        }
         // 該当するデータが見つからない場合の処理
         if(!data.Items.length) {
             response.statusCode = 401;

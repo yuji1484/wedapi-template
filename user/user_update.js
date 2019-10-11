@@ -10,9 +10,17 @@ exports.handler = (event, context, callback) => {
         },
         body: JSON.stringify({"message" : "" })
     };
-    
+
+    // 認証情報をチェックする
+    if (event.headers.Authorization !== "dwc2019"){
+        response.statusCode = 400;
+        response.body = JSON.stringify({"message":"ログインしてください。"});
+        callback(null, response);
+        return;
+    }
+
     var body = JSON.parse(event.body);
-    
+
     // DBに登録するための情報をparamオフジェクトとして宣言する
     var param = {
         "TableName": tableName,
@@ -23,7 +31,7 @@ exports.handler = (event, context, callback) => {
             "nickname": body.nickname
         }
     };
-    
+
     // dynamo.put()でDBのデータを更新
     dynamo.put(param, function(err, data) {
         if (err) {
@@ -41,5 +49,5 @@ exports.handler = (event, context, callback) => {
             return;
         }
     });
-    
+
 };
