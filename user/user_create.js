@@ -11,7 +11,30 @@ exports.handler = (event, context, callback) => {
         body: JSON.stringify({"message" : "" })
     };
 
+    // リクエストを取得し、JSのオブジェクトにパースする
     var body = JSON.parse(event.body);
+
+    // (バリデーション)bodyが空だったら返す
+    if(!body){
+        response.statusCode = 400;
+        response.body = JSON.stringify({"message":"bodyが空です。"});
+        callback(null, response);
+        return;
+    }
+
+    // bodyの中身を取得
+    var userId = body.userId;
+    var age = body.age;
+    var password = body.password;
+    var nickname = body.nickname;
+
+    // (バリデーション)パラメータのどれかが空だったら返す
+    if(!userId || !password || !nickname || !age){
+        response.statusCode = 400;
+        response.body = JSON.stringify({"message":"パラメータが足りません。"});
+        callback(null, response);
+        return;
+    }
 
     // DBに登録するための情報をparamオフジェクトとして宣言する
     var param = {
